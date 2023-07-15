@@ -19,6 +19,7 @@ def index():
 @app.route('/upload', methods=['POST'])
 def upload():
     video = request.files['video']
+    langu = request.form['language']
     video_path = f"video/{i}.mp4"
     video.save(video_path)
 
@@ -40,7 +41,7 @@ def upload():
         with open(f"{i}translated.txt", 'w', encoding='utf-8') as file2:
             for j in file1:
                 input_text = j
-                output = translator.translate(input_text, dest='hi')
+                output = translator.translate(input_text, dest=langu)
                 file2.write(output.text + '\n')
     file1.close()
     file2.close()
@@ -48,7 +49,7 @@ def upload():
     # making an audio file from translated text file
     with open(f"{i}translated.txt", 'r', encoding='utf-8') as file1:
         input_text = file1.read()
-        audio = gTTS(text=input_text, lang='hi', slow=False)
+        audio = gTTS(text=input_text, lang=langu, slow=False)
         audio.save(f'audio/{i}_translated.wav')
     file1.close()
 
